@@ -110,9 +110,9 @@ export const members: Member[] = [
     name: 'ナオノット',
     nameEn: 'NAONOT',
     role: '運搬 / 搬入 / サポート',
-    icon: '/assets/members/naonot.jpeg',
+    icon: '/assets/members/naonot.png',
     bio: [
-      'オーエンを愛し続ける狂人ナオノットです!!\n小学2年の時からオーエン中毒者やってます!!\n神奈川の民基本搬入、運搬をメインで基本出来る事はなんでもやる奴',
+      'オーエン中毒者末期\n運転手兼営業部長\n2013年（小2）からオーエンに狂う人\n殆どのイベントに出現する神奈川から這い出てくる奴',
     ],
     socials: [{ label: 'X / TWITTER', href: 'https://x.com/nao_not1222' }],
   },
