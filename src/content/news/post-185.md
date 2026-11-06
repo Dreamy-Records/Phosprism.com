@@ -2,13 +2,13 @@
 title: '【C104】お品書き'
 date: 2024-08-09
 category: 'EVENT'
-description: '8月12日に開催されるコミックマーケット104 2日目に東タ04aにてサークル参加です。 Dreamy Recordsの頒布物 ・新譜DRERCD – 002: Planet World￥1000 DRERC […]'
+description: '8月12日に開催されるコミックマーケット104 2日目に東タ04aにてサークル参加です。 Phos''Prismの頒布物 ・新譜DRERCD – 002: Planet World￥1000 DRERC […]'
 image: '/assets/news/185-Dreamy-Records-header-1.png'
 ---
 
 8月12日に開催されるコミックマーケット104 2日目に東タ04aにてサークル参加です。
 
-## Dreamy Recordsの頒布物
+## Phos'Prismの頒布物
 
 ・新譜  
 **DRERCD – 002: Planet World**  

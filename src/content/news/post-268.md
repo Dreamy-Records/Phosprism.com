@@ -2,14 +2,14 @@
 title: '【紅楼夢20】お品書き'
 date: 2024-10-04
 category: 'EVENT'
-description: '10月06日に開催される 東方紅楼夢 第20回 に『え-28a』にてサークル参加です。 Dreamy Recordsの頒布物 ・新譜DMERCD – 003: ALL DREAMBREAK REMIX￥500 DMERC […]'
+description: '10月06日に開催される 東方紅楼夢 第20回 に『え-28a』にてサークル参加です。 Phos''Prismの頒布物 ・新譜DMERCD – 003: ALL DREAMBREAK REMIX￥500 DMERC […]'
 image: '/assets/news/268-Dreamy-Records-header-1.png'
 ---
 
 10月06日に開催される 東方紅楼夢   
 第20回 に『え-28a』にてサークル参加です。
 
-## Dreamy Recordsの頒布物
+## Phos'Prismの頒布物
 
 ・新譜  
 **DMERCD – 003: ALL DREAMBREAK REMIX**  

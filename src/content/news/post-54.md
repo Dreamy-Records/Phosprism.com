@@ -16,4 +16,4 @@ image: '/assets/news/54-%E3%81%8B%E3%82%93%E3%81%9B-.png'
 
 [BOOTH](https://dreamyrecords.booth.pm/items/5694654)
 
-※現在Dreamy Recordsはメルカリやamazonなどでは委託しておりません。
+※現在Phos'Prismはメルカリやamazonなどでは委託しておりません。

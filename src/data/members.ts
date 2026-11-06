@@ -20,7 +20,7 @@ export const members: Member[] = [
     ],
     socials: [
       { label: 'X / TWITTER', href: 'https://x.com/myondreamy/' },
-      { label: 'YOUTUBE(Dreamy Records)', href: 'https://www.youtube.com/@dreamy_records' },
+      { label: "YOUTUBE(Phos'Prism)", href: 'https://www.youtube.com/@dreamy_records' },
     ],
   },
   {

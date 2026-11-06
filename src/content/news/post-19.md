@@ -1,5 +1,5 @@
 ---
-title: 'Dreamy Recordsのホームページを公開しました。'
+title: 'Phos''Prismのホームページを公開しました。'
 date: 2024-05-11
 category: 'WEBSITE'
 description: 'dreamy-records.netを本日公開しました！！みなさまよろしくお願いします！'

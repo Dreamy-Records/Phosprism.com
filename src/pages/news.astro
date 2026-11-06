@@ -8,7 +8,7 @@ const articles = (await getCollection('news')).sort((a, b) => b.data.date.valueO
 const totalPages = Math.ceil(articles.length / articlesPerPage);
 ---
 
-<SiteLayout title="News — Dreamy Records" page="news">
+<SiteLayout title="News — Phos'Prism" page="news">
   <NewsListing
     articles={articles.slice(0, articlesPerPage)}
     allArticles={articles}
