@@ -1,6 +1,6 @@
 # Phos'Prism Website
 
-[Phos'Prism](https://dreamy-records.net) の公式サイトです。Astroで静的サイトとして生成し、ニュース、音楽作品、メンバー、イベント、メディア、ショップ、お問い合わせ情報を提供しています。
+[Phos'Prism](https://phosprism.com) の公式サイトです。Astroで静的サイトとして生成し、ニュース、音楽作品、メンバー、イベント、メディア、ショップ、お問い合わせ情報を提供しています。
 
 ## サイト内容
 

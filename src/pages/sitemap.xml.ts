@@ -28,7 +28,7 @@ const staticPages: SitemapEntry[] = [
 const toDate = (date: Date) => date.toISOString().slice(0, 10);
 
 export const GET: APIRoute = async ({ site }) => {
-  const baseUrl = site ?? new URL('https://dreamy-records.net');
+  const baseUrl = site ?? new URL('https://phosprism.com');
   const articles = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   assertUniqueNewsSlugs(articles);
 
