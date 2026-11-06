@@ -4,7 +4,11 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 const rssUrl = new URL('/rss', Astro.site).href;
 ---
 
-<SiteLayout title="RSS — Phos'Prism" page="rss-info">
+<SiteLayout
+  title="RSS — Phos'Prism"
+  page="rss-info"
+  description="Phos'PrismのニュースをRSSリーダーで受け取るためのフィードURLのご案内です。"
+>
   <main class="page-shell dark-page rss-info-page">
     <header class="page-title"><span>RSS</span><h1>RSS</h1><p>RSSフィード</p></header>
 
