@@ -1,0 +1,122 @@
+/*
+ * Font Awesome Free 7 (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ *
+ * サイトで使っているアイコンだけに絞った軽量版。
+ * all.min.css（約100KB）とフォント一式（約250KB）の代わりに読み込む。
+ *
+ * 新しいアイコンを使うときは次の2つが必要:
+ *   1. 下の「アイコン一覧」に .fa-名前 { --fa: "コード"; } を追加する
+ *      （コードは node_modules/@fortawesome/fontawesome-free/css/all.css で確認できる）
+ *   2. src/fonts/ のフォントにその文字を追加する（scripts/subset-icon-fonts.sh を参照）
+ */
+
+@font-face {
+  font-family: 'Font Awesome 7 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url('../fonts/fa-solid-subset.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Font Awesome 7 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('../fonts/fa-regular-subset.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Font Awesome 7 Brands';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('../fonts/fa-brands-subset.woff2') format('woff2');
+}
+
+:root {
+  --fa-family-classic: 'Font Awesome 7 Free';
+  --fa-family-brands: 'Font Awesome 7 Brands';
+}
+
+.fa-solid,
+.fa-regular,
+.fa-brands {
+  --_fa-family: var(--fa-family, var(--fa-style-family, 'Font Awesome 7 Free'));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: var(--fa-display, inline-block);
+  font-family: var(--_fa-family);
+  font-feature-settings: normal;
+  font-style: normal;
+  font-synthesis: none;
+  font-variant: normal;
+  font-weight: var(--fa-style, 900);
+  line-height: 1;
+  text-align: center;
+  text-rendering: auto;
+  width: var(--fa-width, 1.25em);
+}
+
+:is(.fa-solid, .fa-regular, .fa-brands)::before {
+  content: var(--fa) / '';
+}
+
+@supports not (content: '' / '') {
+  :is(.fa-solid, .fa-regular, .fa-brands)::before {
+    content: var(--fa);
+  }
+}
+
+.fa-solid {
+  --fa-style: 900;
+}
+.fa-regular {
+  --fa-style: 400;
+}
+.fa-brands {
+  --fa-family: var(--fa-family-brands);
+  --fa-style: 400;
+}
+
+/* アイコン一覧 */
+.fa-arrow-left {
+  --fa: '\f060';
+}
+.fa-arrow-right {
+  --fa: '\f061';
+}
+.fa-arrow-up-from-bracket {
+  --fa: '\e09a';
+}
+.fa-arrow-up-right-from-square {
+  --fa: '\f08e';
+}
+.fa-copy {
+  --fa: '\f0c5';
+}
+.fa-download {
+  --fa: '\f019';
+}
+.fa-magnifying-glass {
+  --fa: '\f002';
+}
+.fa-paper-plane {
+  --fa: '\f1d8';
+}
+.fa-rotate-left {
+  --fa: '\f2ea';
+}
+.fa-sliders {
+  --fa: '\f1de';
+}
+.fa-xmark {
+  --fa: '\f00d';
+}
+.fa-discord {
+  --fa: '\f392';
+}
+.fa-x-twitter {
+  --fa: '\e61b';
+}
+.fa-youtube {
+  --fa: '\f167';
+}

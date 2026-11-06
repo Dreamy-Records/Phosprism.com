@@ -23,6 +23,9 @@ const slides = [
             decoding="async"
             widths={[640, 960, 1280, 1920]}
             sizes="100vw"
+            quality={80}
+            fetchpriority={index === 0 ? 'high' : undefined}
+            deferred={index > 0}
           />
         ))
       }
@@ -61,6 +64,25 @@ const slides = [
     gsap.killTweensOf(slides);
   };
 
+  // 2枚目以降のスライドは、ページの表示が終わってから読み込む
+  const loadDeferredImages = () => {
+    document.querySelectorAll<HTMLImageElement>('img[data-deferred-image]').forEach((image) => {
+      const source = image.parentElement?.querySelector<HTMLSourceElement>('source[data-srcset]');
+      if (source?.dataset.srcset) {
+        source.srcset = source.dataset.srcset;
+        source.removeAttribute('data-srcset');
+      }
+      if (image.dataset.src) {
+        image.src = image.dataset.src;
+        image.removeAttribute('data-src');
+      }
+      image.removeAttribute('data-deferred-image');
+    });
+  };
+
+  if (document.readyState === 'complete') loadDeferredImages();
+  else window.addEventListener('load', loadDeferredImages, { once: true });
+
   const startSlideshow = () => {
     if (!slides.length) return;
 
@@ -74,6 +96,7 @@ const slides = [
 
     gsap.to(slides[0], { scale: 1, duration: 4.1, ease: 'none' });
     slideshowTimer = window.setInterval(() => {
+      loadDeferredImages();
       const previous = slides[current];
       current = (current + 1) % slides.length;
       const next = slides[current];
