@@ -1,0 +1,47 @@
+---
+import type { Label, LabelId } from '../data/labels';
+
+interface Props {
+  labels: Label[];
+  counts: Record<LabelId, number>;
+  current: LabelId;
+  /** 指定するとリンク、省略するとページ内切り替え用のボタンになる */
+  hrefFor?: (label: LabelId) => string;
+}
+
+const { labels, counts, current, hrefFor } = Astro.props;
+---
+
+<nav class="label-tree" aria-label="レーベル">
+  <span class="label-tree-root">LABEL</span>
+  <ul role="list">
+    {
+      labels.map((label) => {
+        const content = (
+          <>
+            <span>{label.name}</span>
+            {label.status && <em class="label-tree-status">{label.status}</em>}
+            <small>{String(counts[label.id] ?? 0).padStart(2, '0')}</small>
+          </>
+        );
+        return (
+          <li>
+            {hrefFor ? (
+              <a href={hrefFor(label.id)} aria-current={label.id === current ? 'page' : undefined}>
+                {content}
+              </a>
+            ) : (
+              <button
+                type="button"
+                data-label-filter={label.id}
+                aria-pressed={label.id === current ? 'true' : 'false'}
+              >
+                {content}
+              </button>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

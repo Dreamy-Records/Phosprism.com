@@ -1,12 +1,12 @@
 ---
-title: 'Phos''Prismの壁紙配布'
+title: 'Dreamy Recordsの壁紙配布'
 date: 2024-07-11
 category: 'OTHER'
-description: 'Phos''Prismの壁紙です。ご自由にダウンロードしてお使いください。※加工や二次配布はなさらないようお願いいたします。 ご希望の画像にカーソルを合わせて、右クリックまたは長押しで「名前を付けて保存」または「イ […]'
+description: 'Dreamy Recordsの壁紙です。ご自由にダウンロードしてお使いください。※加工や二次配布はなさらないようお願いいたします。 ご希望の画像にカーソルを合わせて、右クリックまたは長押しで「名前を付けて保存」または「イ […]'
 image: '/assets/news/135-Dreamy-Records-header-1.png'
 ---
 
-Phos'Prismの壁紙です。  
+Dreamy Recordsの壁紙です。  
 ご自由にダウンロードしてお使いください。  
 ※加工や二次配布はなさらないようお願いいたします。
 

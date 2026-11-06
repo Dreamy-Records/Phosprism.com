@@ -1,8 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getNewsSlug } from '../utils/newsSlug';
+import { newsListHref } from '../utils/newsPages';
+import { labels, type LabelId } from '../data/labels';
+import LabelTree from './LabelTree.astro';
 
 interface Props {
+  label: LabelId;
+  labelCounts: Record<LabelId, number>;
   articles: CollectionEntry<'news'>[];
   allArticles: CollectionEntry<'news'>[];
   currentPage: number;
@@ -10,7 +15,9 @@ interface Props {
   startIndex: number;
 }
 
-const { articles, allArticles, currentPage, totalPages, startIndex } = Astro.props;
+const { label, labelCounts, articles, allArticles, currentPage, totalPages, startIndex } = Astro.props;
+const currentLabel = labels.find((item) => item.id === label);
+const hasArticles = allArticles.length > 0;
 const formatDate = (date: Date) =>
   date
     .toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
@@ -19,12 +26,36 @@ const years = [...new Set(allArticles.map((item) => item.data.date.getFullYear()
 const categories = [...new Set(allArticles.map((item) => item.data.category))].sort((a, b) =>
   a.localeCompare(b, 'ja'),
 );
-const pageHref = (page: number) => (page === 1 ? '/news/' : `/news/page/${page}/`);
+const pageHref = (page: number) => newsListHref(label, page);
 ---
 
 <main class="page-shell dark-page news-page">
   <header class="page-title"><span>02 / NEWS</span><h1>NEWS</h1><p>最新情報</p></header>
-  <div class="news-tools-wrap profile-reveal">
+  <div class="news-label-nav profile-reveal">
+    <LabelTree
+      labels={labels}
+      counts={labelCounts}
+      current={label}
+      hrefFor={(id) => newsListHref(id)}
+    />
+  </div>
+  {
+    currentLabel?.note && (
+      <p class="label-note profile-reveal">
+        <em>{currentLabel.status}</em>
+        {currentLabel.note}
+      </p>
+    )
+  }
+  {
+    !hasArticles && (
+      <p class="music-empty news-empty">
+        <span>COMING SOON</span>
+        <small>記事はまだありません。</small>
+      </p>
+    )
+  }
+  <div class="news-tools-wrap profile-reveal" hidden={!hasArticles}>
     <form class="news-tools" data-news-filters autocomplete="off">
       <label class="news-search">
         <span>SEARCH</span>
@@ -273,7 +304,8 @@ const pageHref = (page: number) => (page === 1 ? '/news/' : `/news/page/${page}/
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && floatingPanel && !floatingPanel.hidden) closeFloatingFilters();
   });
-  if (primarySearch && floatingTrigger) {
+  // 記事がないレーベルでは絞り込みボタンを出さない
+  if (primarySearch && floatingTrigger && rows.length > 0) {
     new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) hideFloatingTrigger();

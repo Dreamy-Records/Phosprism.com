@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { members } from '../data/members';
+import { labels } from '../data/labels';
 import { assertUniqueNewsSlugs, getNewsSlug } from '../utils/newsSlug';
-
-const articlesPerPage = 10;
+import { getNewsByLabel, newsListHref, pageCount } from '../utils/newsPages';
 
 type SitemapEntry = {
   path: string;
@@ -32,9 +32,12 @@ export const GET: APIRoute = async ({ site }) => {
   const articles = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   assertUniqueNewsSlugs(articles);
 
-  const newsPages: SitemapEntry[] = Array.from(
-    { length: Math.max(Math.ceil(articles.length / articlesPerPage) - 1, 0) },
-    (_, index) => ({ path: `/news/page/${index + 2}/` }),
+  // /news/ は staticPages に含まれるので、それ以外のレーベル別一覧を追加する
+  const newsByLabel = await getNewsByLabel();
+  const newsPages: SitemapEntry[] = labels.flatMap((label) =>
+    Array.from({ length: pageCount(newsByLabel[label.id]) }, (_, index) => ({
+      path: newsListHref(label.id, index + 1),
+    })).filter((entry) => entry.path !== '/news/'),
   );
   const articlePages: SitemapEntry[] = articles
     .filter((article) => !article.data.redirectTo)

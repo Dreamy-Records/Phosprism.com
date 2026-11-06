@@ -2,12 +2,12 @@
 title: 'Dream Dance Floor.01 リリースのお知らせ'
 date: 2026-04-25
 category: 'RELEASE'
-description: 'Phos''Prismが贈る新シリーズ『Dream Dance Floor』の第一弾が登場しました。'
+description: 'Dreamy Recordsが贈る新シリーズ『Dream Dance Floor』の第一弾が登場しました。'
 image: '/assets/1-1024x1012.webp'
 redirectTo: 'https://sp.dreamy-records.net/discography/dmer008'
 ---
 
-Phos'Prismが贈る新シリーズ、**『Dream Dance Floor』**の第一弾がついに登場しました。
+Dreamy Recordsが贈る新シリーズ、**『Dream Dance Floor』**の第一弾がついに登場しました。
 
 豪華ゲストを迎え、最初から最後までフロアを揺らすダンスミュージック全9曲を収録しています。
 

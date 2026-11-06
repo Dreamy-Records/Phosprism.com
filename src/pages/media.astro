@@ -1,48 +1,75 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import OptimizedImage from '../components/OptimizedImage.astro';
+import LabelTree from '../components/LabelTree.astro';
+import { defaultLabel, labels, type LabelId } from '../data/labels';
 
-const xfdVideos = [
-  { title: 'Lunar Reverie', videoId: 'ppGIWWw6LiE' },
-  { title: 'Summer Diary', videoId: 'W8YXCUVvB-A' },
-  { title: 'Dream Dance Floor.01', videoId: 'nyMHssysAxY' },
-  { title: 'Eclipse', videoId: '_swuvqZZkw4' },
-  { title: 'THE DREAMY RECORDS BEST5 COLLECTION', videoId: 'Xbn2MFLnUcs' },
-  { title: 'THE DREAMY RECORDS REMASTER COLLECTION', videoId: 'mzG2zHjHDpM' },
-  { title: 'Future Magic', videoId: 'cwp4YEXNPhg' },
-  { title: 'Forever Night', videoId: '0pld_Cc-gLU' },
-  { title: 'ALL DREAMBREAK REMIX', videoId: 'OhRFjc7UBTQ' },
-  { title: 'Planet World', videoId: '2qUjEhiK6wQ' },
-  { title: 'DREAMBREAK', videoId: 'WrKZfUu9CWY' },
+type Video = { label: LabelId; title: string; videoId: string };
+type Wallpaper = { label: LabelId; title: string; size: string; image: string };
+
+const xfdVideos: Video[] = [
+  { label: 'dreamy-records', title: 'Lunar Reverie', videoId: 'ppGIWWw6LiE' },
+  { label: 'dreamy-records', title: 'Summer Diary', videoId: 'W8YXCUVvB-A' },
+  { label: 'dreamy-records', title: 'Dream Dance Floor.01', videoId: 'nyMHssysAxY' },
+  { label: 'dreamy-records', title: 'Eclipse', videoId: '_swuvqZZkw4' },
+  { label: 'dreamy-records', title: 'THE DREAMY RECORDS BEST5 COLLECTION', videoId: 'Xbn2MFLnUcs' },
+  { label: 'dreamy-records', title: 'THE DREAMY RECORDS REMASTER COLLECTION', videoId: 'mzG2zHjHDpM' },
+  { label: 'dreamy-records', title: 'Future Magic', videoId: 'cwp4YEXNPhg' },
+  { label: 'dreamy-records', title: 'Forever Night', videoId: '0pld_Cc-gLU' },
+  { label: 'dreamy-records', title: 'ALL DREAMBREAK REMIX', videoId: 'OhRFjc7UBTQ' },
+  { label: 'dreamy-records', title: 'Planet World', videoId: '2qUjEhiK6wQ' },
+  { label: 'dreamy-records', title: 'DREAMBREAK', videoId: 'WrKZfUu9CWY' },
 ];
 
-const musicVideos = [
-  { title: 'Invisible at 3AM feat. まっすん', videoId: '3lbBi53cSZI' },
-  { title: '幽雅に咲かせ、黒染の桜 japanese Dream. ', videoId: 'o5cTX5hBZAc' },
+const musicVideos: Video[] = [
+  { label: 'dreamy-records', title: 'Invisible at 3AM feat. まっすん', videoId: '3lbBi53cSZI' },
+  { label: 'dreamy-records', title: '幽雅に咲かせ、黒染の桜 japanese Dream. ', videoId: 'o5cTX5hBZAc' },
 ];
 
-const wallpapers = [
+const wallpapers: Wallpaper[] = [
   {
+    label: 'dreamy-records',
     title: 'Desktop 01',
     size: '1980 × 1080',
     image: '/assets/news/135-Dreamy-Records-01-1024x559.png',
   },
   {
+    label: 'dreamy-records',
     title: 'Desktop 02',
     size: '1980 × 1080',
     image: '/assets/news/135-Dreamy-Records-02-1024x559.png',
   },
   {
+    label: 'dreamy-records',
     title: 'Mobile 01',
     size: '1284 × 2778',
     image: '/assets/news/135-Dreamy-Records-s-01-473x1024.png',
   },
   {
+    label: 'dreamy-records',
     title: 'Mobile 02',
     size: '1284 × 2778',
     image: '/assets/news/135-Dreamy-Records-s-02-473x1024.png',
   },
 ];
+
+const labelCounts = Object.fromEntries(
+  labels.map((label) => [
+    label.id,
+    [...xfdVideos, ...musicVideos, ...wallpapers].filter((item) => item.label === label.id).length,
+  ]),
+) as Record<LabelId, number>;
+// レーベルごとに出さないタブ
+const hiddenTabsByLabel: Partial<Record<LabelId, string[]>> = {
+  phosprism: ['wallpaper'],
+};
+const tabHiddenLabels = (tab: string) =>
+  labels
+    .filter((label) => hiddenTabsByLabel[label.id]?.includes(tab))
+    .map((label) => label.id)
+    .join(' ');
+const isTabHidden = (tab: string) => hiddenTabsByLabel[defaultLabel]?.includes(tab) ?? false;
+const hasItems = (items: { label: LabelId }[]) => items.some((item) => item.label === defaultLabel);
 ---
 
 <SiteLayout title="Media — Phos'Prism" page="media">
@@ -53,35 +80,52 @@ const wallpapers = [
       <p>動画・壁紙</p>
     </header>
 
-    <div class="music-view-switch media-view-switch" role="tablist" aria-label="メディア種別">
-      <button
-        type="button"
-        id="media-tab-xfd"
-        role="tab"
-        aria-controls="media-panel-xfd"
-        aria-selected="true"
-        aria-pressed="true"
-        data-media-tab="xfd">XFD</button
-      >
-      <button
-        type="button"
-        id="media-tab-mv"
-        role="tab"
-        aria-controls="media-panel-mv"
-        aria-selected="false"
-        aria-pressed="false"
-        data-media-tab="mv">MV</button
-      >
-      <button
-        type="button"
-        id="media-tab-wallpaper"
-        role="tab"
-        aria-controls="media-panel-wallpaper"
-        aria-selected="false"
-        aria-pressed="false"
-        data-media-tab="wallpaper">WALLPAPER</button
-      >
+    <div class="music-toolbar media-toolbar">
+      <LabelTree labels={labels} counts={labelCounts} current={defaultLabel} />
+
+      <div class="music-view-switch media-view-switch" role="tablist" aria-label="メディア種別">
+        <button
+          type="button"
+          id="media-tab-xfd"
+          role="tab"
+          aria-controls="media-panel-xfd"
+          aria-selected="true"
+          aria-pressed="true"
+          data-media-tab="xfd">XFD</button
+        >
+        <button
+          type="button"
+          id="media-tab-mv"
+          role="tab"
+          aria-controls="media-panel-mv"
+          aria-selected="false"
+          aria-pressed="false"
+          data-media-tab="mv">MV</button
+        >
+        <button
+          type="button"
+          id="media-tab-wallpaper"
+          role="tab"
+          aria-controls="media-panel-wallpaper"
+          aria-selected="false"
+          aria-pressed="false"
+          data-media-tab="wallpaper"
+          data-hidden-labels={tabHiddenLabels('wallpaper')}
+          hidden={isTabHidden('wallpaper')}>WALLPAPER</button
+        >
+      </div>
     </div>
+
+    {
+      labels
+        .filter((label) => label.note)
+        .map((label) => (
+          <p class="label-note" data-label-note={label.id} hidden={label.id !== defaultLabel}>
+            <em>{label.status}</em>
+            {label.note}
+          </p>
+        ))
+    }
 
     <section
       class="media-panel profile-reveal"
@@ -89,10 +133,18 @@ const wallpapers = [
       role="tabpanel"
       aria-labelledby="media-tab-xfd"
     >
+      <p class="music-empty media-empty" data-media-empty hidden={hasItems(xfdVideos)}>
+        <span>COMING SOON</span>
+        <small>XFDは準備中です。</small>
+      </p>
       <div class="media-video-grid">
         {
           xfdVideos.map((video) => (
-            <article class="media-video-card">
+            <article
+              class="media-video-card"
+              data-label={video.label}
+              hidden={video.label !== defaultLabel}
+            >
               <div class="media-video-frame">
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${video.videoId}`}
@@ -118,10 +170,18 @@ const wallpapers = [
       aria-labelledby="media-tab-mv"
       hidden
     >
+      <p class="music-empty media-empty" data-media-empty hidden={hasItems(musicVideos)}>
+        <span>COMING SOON</span>
+        <small>MVは準備中です。</small>
+      </p>
       <div class="media-video-grid">
         {
           musicVideos.map((video) => (
-            <article class="media-video-card">
+            <article
+              class="media-video-card"
+              data-label={video.label}
+              hidden={video.label !== defaultLabel}
+            >
               <div class="media-video-frame">
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${video.videoId}`}
@@ -147,13 +207,23 @@ const wallpapers = [
       aria-labelledby="media-tab-wallpaper"
       hidden
     >
-      <p class="media-note">
+      <p class="music-empty media-empty" data-media-empty hidden={hasItems(wallpapers)}>
+        <span>COMING SOON</span>
+        <small>壁紙は準備中です。</small>
+      </p>
+      <p class="media-note" data-media-wallpaper-note hidden={!hasItems(wallpapers)}>
         画像をタップまたはクリックして保存してください。加工・二次配布はご遠慮ください。
       </p>
       <div class="wallpaper-grid">
         {
           wallpapers.map((wallpaper) => (
-            <a class="wallpaper-card" href={wallpaper.image} download>
+            <a
+              class="wallpaper-card"
+              href={wallpaper.image}
+              download
+              data-label={wallpaper.label}
+              hidden={wallpaper.label !== defaultLabel}
+            >
               <OptimizedImage src={wallpaper.image} alt={`${wallpaper.title} 壁紙`} loading="lazy" />
               <span>
                 <strong>{wallpaper.title}</strong>
@@ -184,5 +254,48 @@ const wallpapers = [
     };
 
     tabs.forEach((tab) => tab.addEventListener('click', () => selectTab(tab)));
+
+    const labelButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-label-filter]')];
+    const labelNotes = [...document.querySelectorAll<HTMLElement>('[data-label-note]')];
+    const wallpaperNote = document.querySelector<HTMLElement>('[data-media-wallpaper-note]');
+    const labelIds = labelButtons.map((button) => button.dataset.labelFilter ?? '');
+    const labelKey = 'phosprism-media-label';
+
+    const setLabel = (label: string) => {
+      sessionStorage.setItem(labelKey, label);
+      labelButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.labelFilter === label));
+      });
+      labelNotes.forEach((note) => {
+        note.hidden = note.dataset.labelNote !== label;
+      });
+      tabs.forEach((tab) => {
+        tab.hidden = (tab.dataset.hiddenLabels ?? '').split(' ').includes(label);
+      });
+      // 選択中のタブが消えた場合は先頭のタブに切り替える
+      const selectedTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true');
+      if (selectedTab?.hidden) {
+        const firstVisible = tabs.find((tab) => !tab.hidden);
+        if (firstVisible) selectTab(firstVisible);
+      }
+      panels.forEach((panel) => {
+        const items = [...panel.querySelectorAll<HTMLElement>('[data-label]')];
+        items.forEach((item) => {
+          item.hidden = item.dataset.label !== label;
+        });
+        const hasItems = items.some((item) => !item.hidden);
+        const empty = panel.querySelector<HTMLElement>('[data-media-empty]');
+        if (empty) empty.hidden = hasItems;
+        if (wallpaperNote && panel.contains(wallpaperNote)) wallpaperNote.hidden = !hasItems;
+      });
+    };
+
+    labelButtons.forEach((button) => {
+      button.addEventListener('click', () => setLabel(button.dataset.labelFilter ?? labelIds[0]));
+    });
+
+    // 初期表示は Phos'Prism。同じタブで戻ってきた場合だけ直前のレーベルを復元する。
+    const savedLabel = sessionStorage.getItem(labelKey) ?? '';
+    setLabel(labelIds.includes(savedLabel) ? savedLabel : labelIds[0]);
   </script>
 </SiteLayout>

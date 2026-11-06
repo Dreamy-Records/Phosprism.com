@@ -1,8 +1,21 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import OptimizedImage from '../components/OptimizedImage.astro';
-const releases = [
+import LabelTree from '../components/LabelTree.astro';
+import { defaultLabel, labels, type LabelId } from '../data/labels';
+
+type Release = {
+  label: LabelId;
+  code: string;
+  year: string;
+  title: string;
+  image: string;
+  link?: string;
+};
+
+const releases: Release[] = [
   {
+    label: 'dreamy-records',
     code: 'DMERCD–011',
     year: '2026',
     title: 'Lunar Reverie',
@@ -10,6 +23,7 @@ const releases = [
     link: 'https://sp.dreamy-records.net/discography/dmer011',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–010',
     year: '2026',
     title: 'Summer Diary',
@@ -17,12 +31,14 @@ const releases = [
     link: 'https://sp.dreamy-records.net/discography/dmer010',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–009',
     year: '2026',
     title: 'THE DREAMY RECORDS BEST5 COLLECTION',
     image: '/assets/tdrb5c.png',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–008',
     year: '2026',
     title: 'Dream Dance Floor.01',
@@ -30,6 +46,7 @@ const releases = [
     link: 'https://sp.dreamy-records.net/discography/dmer008',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–007',
     year: '2025',
     title: 'Eclipse',
@@ -37,6 +54,7 @@ const releases = [
     link: 'https://sp.dreamy-records.net/discography/dmer007/',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–006',
     year: '2025',
     title: 'THE DREAMY RECORDS REMASTER COLLECTION',
@@ -44,6 +62,7 @@ const releases = [
     link: 'https://dreamy-records.net/discography/dmer006/',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–005',
     year: '2025',
     title: 'Future Magic',
@@ -51,6 +70,7 @@ const releases = [
     link: 'https://dreamy-records.net/discography/dmer005/',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–004',
     year: '2024',
     title: 'Forever Night',
@@ -58,6 +78,7 @@ const releases = [
     link: '/news/forever-night/',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–003',
     year: '2024',
     title: 'Dream Break Remix Phase.1',
@@ -65,6 +86,7 @@ const releases = [
     link: '/news/all-dreambreak-remix-phase-1/',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–002',
     year: '2024',
     title: 'Planet World',
@@ -72,6 +94,7 @@ const releases = [
     link: '/news/planet-world/',
   },
   {
+    label: 'dreamy-records',
     code: 'DMERCD–001',
     year: '2024',
     title: 'Dream Break',
@@ -79,6 +102,17 @@ const releases = [
     link: '/news/post-54/',
   },
 ];
+
+// レーベルごとの通し番号（新しい作品ほど大きい番号）
+const releaseNumbers = releases.map((release, index) => {
+  const sameLabel = releases.filter((item) => item.label === release.label);
+  const position = releases.slice(0, index).filter((item) => item.label === release.label).length;
+  return String(sameLabel.length - position).padStart(2, '0');
+});
+const labelCounts = Object.fromEntries(
+  labels.map((label) => [label.id, releases.filter((release) => release.label === label.id).length]),
+) as Record<LabelId, number>;
+const initialReleases = releases.filter((release) => release.label === defaultLabel);
 ---
 
 <SiteLayout title="Music — Phos'Prism" page="music">
@@ -87,12 +121,32 @@ const releases = [
       <span>04 / MUSIC</span><h1>MUSIC</h1><p>作品一覧</p>
     </header>
 
-    <div class="music-view-switch" role="group" aria-label="作品の表示方法">
-      <button type="button" data-music-view="coverflow" aria-pressed="true">COVER FLOW</button>
-      <button type="button" data-music-view="list" aria-pressed="false">LIST VIEW</button>
+    <div class="music-toolbar">
+      <LabelTree labels={labels} counts={labelCounts} current={defaultLabel} />
+
+      <div class="music-view-switch" role="group" aria-label="作品の表示方法">
+        <button type="button" data-music-view="coverflow" aria-pressed="true">COVER FLOW</button>
+        <button type="button" data-music-view="list" aria-pressed="false">LIST VIEW</button>
+      </div>
     </div>
 
-    <section class="coverflow" aria-label="アルバムを選択">
+    {
+      labels
+        .filter((label) => label.note)
+        .map((label) => (
+          <p class="label-note" data-label-note={label.id} hidden={label.id !== defaultLabel}>
+            <em>{label.status}</em>
+            {label.note}
+          </p>
+        ))
+    }
+
+    <p class="music-empty" hidden={initialReleases.length > 0}>
+      <span>COMING SOON</span>
+      <small>作品は準備中です。</small>
+    </p>
+
+    <section class="coverflow" aria-label="アルバムを選択" hidden={initialReleases.length === 0}>
       <div class="coverflow-stage">
         <button class="flow-prev flow-side-arrow" type="button" aria-label="前の作品">
           <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
@@ -102,6 +156,8 @@ const releases = [
             <div
               class="flow-cover"
               data-index={index}
+              data-label={release.label}
+              hidden={release.label !== defaultLabel}
               data-title={release.title}
               data-code={release.code}
               data-year={release.year}
@@ -121,7 +177,7 @@ const releases = [
 
       <div class="flow-controls">
         <div class="flow-info">
-          <a class="flow-release-button icon-action" id="flow-link" href={releases[0].link}>
+          <a class="flow-release-button icon-action" id="flow-link" href={initialReleases[0]?.link ?? '#'}>
             <span>VIEW RELEASE</span>
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
           </a>
@@ -129,15 +185,21 @@ const releases = [
       </div>
 
       <div class="flow-count">
-        <span id="flow-current">01</span> / {String(releases.length).padStart(2, '0')}
+        <span id="flow-current">01</span> /
+        <span id="flow-total">{String(initialReleases.length).padStart(2, '0')}</span>
       </div>
     </section>
 
     <section class="music-list music-list-view" aria-label="作品一覧" hidden>
       {
         releases.map((release, index) => (
-          <a class="music-item" href={release.link}>
-            <span class="music-no">{String(releases.length - index).padStart(2, '0')}</span>
+          <a
+            class="music-item"
+            href={release.link}
+            data-label={release.label}
+            hidden={release.label !== defaultLabel}
+          >
+            <span class="music-no">{releaseNumbers[index]}</span>
             <span class="music-cover">
               <OptimizedImage src={release.image} alt={`${release.title} ジャケット`} loading="lazy" />
             </span>
@@ -162,26 +224,44 @@ const releases = [
   <script>
     import gsap from 'gsap';
 
-    const covers = [...document.querySelectorAll<HTMLElement>('.flow-cover')];
+    const allCovers = [...document.querySelectorAll<HTMLElement>('.flow-cover')];
+    const allItems = [...document.querySelectorAll<HTMLElement>('.music-item')];
     const stage = document.querySelector<HTMLElement>('.coverflow-stage');
     const page = document.querySelector<HTMLElement>('.coverflow-page');
     const coverflow = document.querySelector<HTMLElement>('.coverflow');
     const listView = document.querySelector<HTMLElement>('.music-list-view');
+    const emptyMessage = document.querySelector<HTMLElement>('.music-empty');
     const viewButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-music-view]')];
+    const labelNotes = [...document.querySelectorAll<HTMLElement>('[data-label-note]')];
+    const labelButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-label-filter]')];
     const current = document.querySelector('#flow-current');
+    const total = document.querySelector('#flow-total');
     const flowLink = document.querySelector<HTMLAnchorElement>('#flow-link');
-    const activeReleaseKey = 'dreamy-records-active-release';
-    const savedActive = Number.parseInt(sessionStorage.getItem(activeReleaseKey) ?? '', 10);
-    let active =
-      Number.isInteger(savedActive) && savedActive >= 0 && savedActive < covers.length
-        ? savedActive
-        : 0;
+    const labelIds = labelButtons.map((button) => button.dataset.labelFilter ?? '');
+    const labelKey = 'phosprism-music-label';
+    const activeReleaseKey = (label: string) => `phosprism-active-release-${label}`;
+
+    // 初期表示は Phos'Prism。同じタブで戻ってきた場合だけ直前のレーベルを復元する。
+    const savedLabel = sessionStorage.getItem(labelKey) ?? '';
+    let currentLabel = labelIds.includes(savedLabel) ? savedLabel : labelIds[0];
+    let covers: HTMLElement[] = [];
+    let active = 0;
+    let showList = false;
     let lastNavigationAt = 0;
 
     const spacing = () => Math.min(210, window.innerWidth * 0.28);
 
+    const updatePanels = () => {
+      const hasReleases = covers.length > 0;
+      page?.classList.toggle('is-list-view', showList && hasReleases);
+      if (coverflow) coverflow.hidden = showList || !hasReleases;
+      if (listView) listView.hidden = !showList || !hasReleases;
+      if (emptyMessage) emptyMessage.hidden = hasReleases;
+    };
+
     const render = (quick = false) => {
       const count = covers.length;
+      if (count === 0) return;
 
       covers.forEach((cover, index) => {
         let distance = index - active;
@@ -208,10 +288,41 @@ const releases = [
       const selected = covers[active];
       if (current) current.textContent = String(active + 1).padStart(2, '0');
       if (flowLink) flowLink.href = selected.dataset.link || '#';
-      sessionStorage.setItem(activeReleaseKey, String(active));
+      sessionStorage.setItem(activeReleaseKey(currentLabel), String(active));
+    };
+
+    const setLabel = (label: string) => {
+      currentLabel = label;
+      sessionStorage.setItem(labelKey, label);
+      covers = allCovers.filter((cover) => cover.dataset.label === label);
+      allCovers.forEach((cover) => {
+        cover.hidden = cover.dataset.label !== label;
+      });
+      allItems.forEach((item) => {
+        item.hidden = item.dataset.label !== label;
+      });
+      labelButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.labelFilter === label));
+      });
+      labelNotes.forEach((note) => {
+        note.hidden = note.dataset.labelNote !== label;
+      });
+
+      const savedActive = Number.parseInt(
+        sessionStorage.getItem(activeReleaseKey(label)) ?? '',
+        10,
+      );
+      active =
+        Number.isInteger(savedActive) && savedActive >= 0 && savedActive < covers.length
+          ? savedActive
+          : 0;
+      if (total) total.textContent = String(covers.length).padStart(2, '0');
+      updatePanels();
+      render(true);
     };
 
     const navigate = (direction: 1 | -1) => {
+      if (covers.length === 0) return;
       const now = performance.now();
       const quick = now - lastNavigationAt < 260;
       lastNavigationAt = now;
@@ -223,8 +334,8 @@ const releases = [
     document.querySelector('.flow-next')?.addEventListener('click', () => navigate(1));
 
     stage?.addEventListener('pointermove', (event) => {
-      if (event.pointerType === 'touch') return;
       const cover = covers[active];
+      if (event.pointerType === 'touch' || !cover) return;
       const rect = cover.getBoundingClientRect();
       const x = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
       const y = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
@@ -249,6 +360,7 @@ const releases = [
     });
 
     stage?.addEventListener('pointerleave', () => {
+      if (!covers[active]) return;
       gsap.to(covers[active], {
         rotationY: 0,
         rotationX: 0,
@@ -260,10 +372,8 @@ const releases = [
 
     viewButtons.forEach((button) => {
       button.addEventListener('click', () => {
-        const showList = button.dataset.musicView === 'list';
-        page?.classList.toggle('is-list-view', showList);
-        if (coverflow) coverflow.hidden = showList;
-        if (listView) listView.hidden = !showList;
+        showList = button.dataset.musicView === 'list';
+        updatePanels();
         viewButtons.forEach((item) => {
           item.setAttribute('aria-pressed', String(item === button));
         });
@@ -271,7 +381,14 @@ const releases = [
       });
     });
 
+    labelButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const label = button.dataset.labelFilter;
+        if (label && label !== currentLabel) setLabel(label);
+      });
+    });
+
     addEventListener('resize', () => render(true));
-    render();
+    setLabel(currentLabel);
   </script>
 </SiteLayout>

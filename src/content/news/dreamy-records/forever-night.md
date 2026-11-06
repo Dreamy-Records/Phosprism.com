@@ -21,7 +21,7 @@ DMERCD – 004 **Forever Night**
 
 ![](/assets/news/276-ddd-1024x559.png)
 
-・Phos'Prism TEE(Lサイズのみ)  
+・Dreamy Records TEE(Lサイズのみ)  
 ・クリアファイル(A4)  
 ・Forever Night  
 ・Imperial Shooting  
