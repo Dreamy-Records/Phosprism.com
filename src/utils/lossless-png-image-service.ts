@@ -29,7 +29,9 @@ const losslessPngImageService: typeof sharpImageService = {
     const metadata = await image.metadata();
 
     // PNGは可逆WebPへ変換し、アートワークやロゴの細部を劣化させない。
-    if (metadata.format !== 'png') {
+    // ただし品質を95未満に指定した画像（大きな背景画像など）は通常の非可逆WebPにする。
+    const quality = parseQuality(transform.quality);
+    if (metadata.format !== 'png' || (quality !== undefined && quality < 95)) {
       return sharpImageService.transform(inputBuffer, transform, imageConfig);
     }
 
@@ -52,7 +54,7 @@ const losslessPngImageService: typeof sharpImageService = {
     if (transform.background) image.flatten({ background: transform.background });
 
     const { data, info } = await image
-      .webp({ lossless: true, effort: 6, alphaQuality: 100, quality: parseQuality(transform.quality) })
+      .webp({ lossless: true, effort: 6, alphaQuality: 100, quality })
       .toBuffer({ resolveWithObject: true });
 
     return { data: new Uint8Array(data), format: info.format };

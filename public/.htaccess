@@ -1,0 +1,15 @@
+# ブラウザキャッシュの設定（本番サーバー用）
+<IfModule mod_headers.c>
+  <If "%{REQUEST_URI} =~ m#^/_astro/#">
+    # ファイル名に内容のハッシュが付くビルド成果物は1年間キャッシュする
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  <ElseIf "%{REQUEST_URI} =~ m#^/assets/# || %{REQUEST_URI} == '/favicon.ico'">
+    # 画像などは差し替えがあり得るので1週間
+    Header set Cache-Control "public, max-age=604800"
+  </ElseIf>
+  <Else>
+    # HTMLなどは毎回更新を確認する
+    Header set Cache-Control "no-cache"
+  </Else>
+</IfModule>

@@ -12,9 +12,27 @@ interface Props {
   ariaHidden?: boolean | 'true' | 'false';
   widths?: number[];
   sizes?: string;
+  /** WebPの品質。95以上ならPNGは可逆WebPになる */
+  quality?: number;
+  fetchpriority?: 'high' | 'low' | 'auto';
+  /** true にすると読み込みを後回しにする（data-srcset に入れ、スクリプト側で差し替える） */
+  deferred?: boolean;
 }
 
-const { src, alt, class: className, loading, decoding, draggable, ariaHidden, widths, sizes } = Astro.props;
+const {
+  src,
+  alt,
+  class: className,
+  loading,
+  decoding,
+  draggable,
+  ariaHidden,
+  widths,
+  sizes,
+  quality = 95,
+  fetchpriority,
+  deferred = false,
+} = Astro.props;
 
 const localImages = import.meta.glob<ImageMetadata>(
   [
@@ -39,7 +57,7 @@ const responsiveWidths =
   widths ?? [320, 640, 960, 1280].filter((width) => width < image.width);
 const outputWidths = responsiveWidths.length ? responsiveWidths : [image.width];
 const webpSources = await Promise.all(
-  outputWidths.map((width) => getImage({ src: image, width, format: 'webp', quality: 95 })),
+  outputWidths.map((width) => getImage({ src: image, width, format: 'webp', quality })),
 );
 const fallbackFormat = image.format === 'webp' || image.format === 'avif' ? 'png' : image.format;
 const fallback = await getImage({
@@ -52,9 +70,17 @@ const srcset = webpSources.map((source, index) => `${source.src} ${outputWidths[
 ---
 
 <picture>
-  <source srcset={srcset} sizes={sizes ?? '100vw'} type="image/webp" />
+  <source
+    srcset={deferred ? undefined : srcset}
+    data-srcset={deferred ? srcset : undefined}
+    sizes={sizes ?? '100vw'}
+    type="image/webp"
+  />
   <img
-    src={fallback.src}
+    src={deferred ? undefined : fallback.src}
+    data-src={deferred ? fallback.src : undefined}
+    data-deferred-image={deferred ? '' : undefined}
+    fetchpriority={fetchpriority}
     alt={alt}
     width={fallback.attributes.width}
     height={fallback.attributes.height}
