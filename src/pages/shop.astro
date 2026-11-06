@@ -5,25 +5,25 @@ import OptimizedImage from '../components/OptimizedImage.astro';
 const shops = [
   {
     name: 'BOOTH',
-    description: 'Dreamy Records公式通販。CD・ダウンロード作品を取り扱っています。',
+    description: "Phos'Prism公式通販。CD・ダウンロード作品を取り扱っています。",
     href: 'https://dreamyrecords.booth.pm/',
     logo: '/assets/booth.png',
   },
   {
     name: 'メロンブックス',
-    description: 'Dreamy Recordsの作品をお買い求めいただけます。',
+    description: "Phos'Prismの作品をお買い求めいただけます。",
     href: 'https://www.melonbooks.co.jp/circle/index.php?circle_id=125846',
     logo: '/assets/melonbooks.png',
   },
   {
     name: 'AKIBA-HOBBY',
-    description: 'Dreamy Recordsの作品をお買い求めいただけます。',
+    description: "Phos'Prismの作品をお買い求めいただけます。",
     href: 'https://shop.akbh.jp/collections/vendors?q=Dreamy%20Records',
     logo: '/assets/akiba-hobby.png',
   },
   {
     name: 'DLsite',
-    description: 'Dreamy Recordsの作品をお買い求めいただけます。',
+    description: "Phos'Prismの作品をお買い求めいただけます。",
     href: 'https://www.dlsite.com/home/circle/profile/=/maker_id/RG01062148.html',
     logo: '/assets/dlsite.png',
   },
@@ -31,13 +31,13 @@ const shops = [
 ---
 
 <SiteLayout
-  title="Shop — Dreamy Records"
+  title="Shop — Phos'Prism"
   page="shop"
-  description="Dreamy Records作品の取扱ショップ一覧です。"
+  description="Phos'Prism作品の取扱ショップ一覧です。"
 >
   <main class="page-shell dark-page shop-page">
     <header class="page-title"><span>06 / SHOP</span><h1>SHOP</h1><p>取扱ショップ</p></header>
-    <section class="shop-list" aria-label="Dreamy Records作品の取扱ショップ">
+    <section class="shop-list" aria-label="Phos'Prism作品の取扱ショップ">
       {
         shops.map((shop) => (
           <a class="shop-card shop-reveal" href={shop.href} target="_blank" rel="noreferrer">

@@ -8,8 +8,8 @@ export async function GET(context) {
   assertUniqueNewsSlugs(sortedArticles);
 
   return rss({
-    title: 'Dreamy Records NEWS',
-    description: '東方同人音楽アレンジサークル Dreamy Recordsの最新情報',
+    title: "Phos'Prism NEWS",
+    description: "東方同人音楽アレンジサークル Phos'Prismの最新情報",
     site: context.site,
     trailingSlash: true,
     items: sortedArticles.map((article) => ({

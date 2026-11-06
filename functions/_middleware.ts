@@ -39,7 +39,7 @@ export const onRequest = async ({ request, env, next }: PagesContext) => {
       status: 401,
       headers: {
         ...noIndexHeaders,
-        'WWW-Authenticate': 'Basic realm="Dreamy Records Staging", charset="UTF-8"',
+        'WWW-Authenticate': `Basic realm="Phos'Prism Staging", charset="UTF-8"`,
       },
     });
   }

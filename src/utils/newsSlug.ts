@@ -5,10 +5,11 @@ type NewsEntry = CollectionEntry<'news'>;
 /**
  * Uses the Markdown filename as the default URL. A frontmatter slug always takes
  * precedence, so articles can still use a manually chosen URL when needed.
+ * レーベル別のフォルダ（dreamy-records/ など）はURLに含めない。
  */
 export const getNewsSlug = (entry: NewsEntry) => {
   if (entry.data.slug) return entry.data.slug;
-  return entry.id;
+  return entry.id.split('/').pop() ?? entry.id;
 };
 
 const plainTextFromMarkdown = (markdown: string) =>

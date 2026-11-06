@@ -1502,8 +1502,161 @@ img {
   color: #000;
 }
 .music-list-view[hidden],
-.coverflow[hidden] {
+.coverflow[hidden],
+.flow-cover[hidden],
+.music-item[hidden],
+.music-empty[hidden] {
   display: none;
+}
+.music-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 32px;
+  margin: 0 0 20px;
+}
+.music-toolbar .music-view-switch {
+  margin: 0;
+}
+.label-tree {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+.label-tree-root {
+  display: block;
+  margin-bottom: 4px;
+  color: #b3b3b3;
+}
+.label-tree ul {
+  margin: 0 0 0 4px;
+  padding: 0;
+  list-style: none;
+}
+.label-tree li {
+  position: relative;
+  padding-left: 22px;
+}
+/* ツリーの縦線と横線 */
+.label-tree li::before,
+.label-tree li::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  border-color: #555;
+  border-style: solid;
+  border-width: 0;
+}
+.label-tree li::before {
+  top: 0;
+  bottom: 0;
+  border-left-width: 1px;
+}
+.label-tree li:last-child::before {
+  bottom: 50%;
+}
+.label-tree li::after {
+  top: 50%;
+  width: 14px;
+  border-top-width: 1px;
+}
+.label-tree button,
+.label-tree a {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
+  color: #888;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.25s;
+}
+.label-tree button:hover,
+.label-tree a:hover,
+.label-tree button[aria-pressed='true'],
+.label-tree a[aria-current='page'] {
+  color: #fff;
+}
+.label-tree button[aria-pressed='true'] span,
+.label-tree a[aria-current='page'] span {
+  padding-bottom: 2px;
+  border-bottom: 1px solid #fff;
+}
+.label-tree button small,
+.label-tree a small {
+  color: #777;
+  font-size: 8px;
+}
+.label-tree-status,
+.label-note em {
+  padding: 2px 5px;
+  border: 1px solid #777;
+  color: #b3b3b3;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.label-note[hidden] {
+  display: none;
+}
+.label-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 0 10px;
+  padding: 12px 0;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  color: #b3b3b3;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.music-empty {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-height: 360px;
+  margin: 10px 0 0;
+  border: 1px solid #333;
+  text-align: center;
+}
+.music-empty span {
+  font-size: clamp(1.6rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+.music-empty small {
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.news-label-nav {
+  margin: 0 0 20px;
+}
+.news-tools-wrap[hidden] {
+  display: none;
+}
+.news-empty {
+  margin-bottom: 40px;
+}
+.media-toolbar {
+  margin-bottom: 44px;
+}
+.music-view-switch button[hidden],
+.media-video-card[hidden],
+.wallpaper-card[hidden],
+.media-note[hidden] {
+  display: none;
+}
+.media-empty {
+  min-height: 280px;
+  margin-top: 0;
 }
 .music-list-view {
   margin-top: 25px;

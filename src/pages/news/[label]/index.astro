@@ -1,0 +1,29 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import NewsListing from '../../../components/NewsListing.astro';
+import { defaultLabel, labels } from '../../../data/labels';
+import { articlesPerPage, countNews, getNewsByLabel, pageCount } from '../../../utils/newsPages';
+
+// 初期表示以外のレーベル（/news/dreamy-records/ など）
+export async function getStaticPaths() {
+  const newsByLabel = await getNewsByLabel();
+  return labels
+    .filter((label) => label.id !== defaultLabel)
+    .map((label) => ({ params: { label: label.id }, props: { label, newsByLabel } }));
+}
+
+const { label, newsByLabel } = Astro.props;
+const articles = newsByLabel[label.id];
+---
+
+<SiteLayout title={`News — ${label.name} — Phos'Prism`} page="news">
+  <NewsListing
+    label={label.id}
+    labelCounts={countNews(newsByLabel)}
+    articles={articles.slice(0, articlesPerPage)}
+    allArticles={articles}
+    currentPage={1}
+    totalPages={pageCount(articles)}
+    startIndex={0}
+  />
+</SiteLayout>

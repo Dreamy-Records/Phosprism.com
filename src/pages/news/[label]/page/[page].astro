@@ -1,0 +1,43 @@
+---
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import NewsListing from '../../../../components/NewsListing.astro';
+import { defaultLabel, labels } from '../../../../data/labels';
+import { articlesPerPage, countNews, getNewsByLabel, pageCount } from '../../../../utils/newsPages';
+
+export async function getStaticPaths() {
+  const newsByLabel = await getNewsByLabel();
+  return labels
+    .filter((label) => label.id !== defaultLabel)
+    .flatMap((label) => {
+      const totalPages = pageCount(newsByLabel[label.id]);
+      return Array.from({ length: totalPages - 1 }, (_, index) => {
+        const currentPage = index + 2;
+        return {
+          params: { label: label.id, page: String(currentPage) },
+          props: {
+            label,
+            newsByLabel,
+            currentPage,
+            totalPages,
+            startIndex: (currentPage - 1) * articlesPerPage,
+          },
+        };
+      });
+    });
+}
+
+const { label, newsByLabel, currentPage, totalPages, startIndex } = Astro.props;
+const articles = newsByLabel[label.id];
+---
+
+<SiteLayout title={`News — ${label.name} — Page ${currentPage} — Phos'Prism`} page="news">
+  <NewsListing
+    label={label.id}
+    labelCounts={countNews(newsByLabel)}
+    articles={articles.slice(startIndex, startIndex + articlesPerPage)}
+    allArticles={articles}
+    currentPage={currentPage}
+    totalPages={totalPages}
+    startIndex={startIndex}
+  />
+</SiteLayout>

@@ -1,6 +1,6 @@
-# Dreamy Records Website
+# Phos'Prism Website
 
-[Dreamy Records](https://dreamy-records.net) の公式サイトです。Astroで静的サイトとして生成し、ニュース、音楽作品、メンバー、イベント、メディア、ショップ、お問い合わせ情報を提供しています。
+[Phos'Prism](https://phosprism.com) の公式サイトです。Astroで静的サイトとして生成し、ニュース、音楽作品、メンバー、イベント、メディア、ショップ、お問い合わせ情報を提供しています。
 
 ## サイト内容
 
@@ -115,7 +115,7 @@ WebPに対応しない古いブラウザには、同じ画像から生成した 
 
 | ブランチ  | ビルド環境              | デプロイ先                                            |
 | --------- | ----------------------- | ----------------------------------------------------- |
-| `staging` | `DEPLOY_ENV=staging`    | Cloudflare Pages（`https://test.dreamy-records.net`） |
+| `staging` | `DEPLOY_ENV=staging`    | Cloudflare Pages（`https://test.phosprism.com`） |
 | `main`    | `DEPLOY_ENV=production` | 本番サーバー（SSH + rsync）                           |
 
 ### 基本フロー

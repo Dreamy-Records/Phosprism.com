@@ -13,9 +13,9 @@ interface Props {
 }
 
 const {
-  title = 'Dreamy Records',
+  title = "Phos'Prism",
   page = '',
-  description = '東方同人音楽アレンジサークル Dreamy Records 公式サイト',
+  description = "東方同人音楽アレンジサークル Phos'Prism 公式サイト",
   image,
   noindex = false,
   redirectTo,
@@ -24,7 +24,7 @@ const defaultOgImage = '/assets/news/19-Dreamy-Records-header-1.png';
 const ogImageBase = import.meta.env.DEV ? Astro.url.origin : Astro.site;
 const ogImage = new URL(image || defaultOgImage, ogImageBase).href;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const isStaging = Astro.site?.hostname === 'test.dreamy-records.net';
+const isStaging = Astro.site?.hostname === 'test.phosprism.com';
 const navigationItems = [
   { href: '/about/', label: 'ABOUT', page: 'about' },
   { href: '/news/', label: 'NEWS', page: 'news' },
@@ -58,9 +58,9 @@ const currentPageLabel =
     />{redirectTo && <meta http-equiv="refresh" content={`0;url=${redirectTo}`} />}{(isStaging || noindex) && <meta name="robots" content="noindex, nofollow, noarchive" />}<link
       rel="alternate"
       type="application/rss+xml"
-      title="Dreamy Records NEWS"
+      title="Phos'Prism NEWS"
       href="/rss"
-    /><link rel="sitemap" type="application/xml" title="Dreamy Records Sitemap" href="/sitemap.xml" /><link
+    /><link rel="sitemap" type="application/xml" title="Phos'Prism Sitemap" href="/sitemap.xml" /><link
       rel="icon"
       type="image/png"
       href="/assets/favicon.png"
@@ -119,7 +119,7 @@ const currentPageLabel =
   <body id="top" class={page ? 'inner-body' : 'home-body'}>
     <header class="header">
       <a href="/" class="brand">
-        <OptimizedImage src="/assets/logo.png" alt="Dreamy Records" />
+        <OptimizedImage src="/assets/logo.png" alt="Phos'Prism" />
       </a>
       <nav class="desktop-nav" aria-label="メインナビゲーション">
         {
@@ -141,7 +141,7 @@ const currentPageLabel =
           </span>
         )
       }
-      <nav class="header-socials" aria-label="Dreamy Records SNS">
+      <nav class="header-socials" aria-label="Phos'Prism SNS">
         <a href="https://x.com/dreamy_records" target="_blank" rel="noreferrer" aria-label="X">
           <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
         </a>
@@ -186,7 +186,7 @@ const currentPageLabel =
         <a href="/contact/"><small>08</small><strong>CONTACT</strong><span>お問い合わせ</span></a>
       </nav>
       <div class="menu-foot">
-        <nav class="menu-socials" aria-label="Dreamy Records SNS">
+        <nav class="menu-socials" aria-label="Phos'Prism SNS">
           <a href="https://x.com/dreamy_records" target="_blank" rel="noreferrer" aria-label="X">
             <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
           </a>
@@ -207,7 +207,7 @@ const currentPageLabel =
             <i class="fa-brands fa-discord" aria-hidden="true"></i>
           </a>
         </nav>
-        <span>© 2026 DREAMY RECORDS</span>
+        <span>© 2026 PHOS'PRISM</span>
       </div>
     </div>
     <slot />

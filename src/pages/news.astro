@@ -1,19 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import NewsListing from '../components/NewsListing.astro';
+import { defaultLabel } from '../data/labels';
+import { articlesPerPage, countNews, getNewsByLabel, pageCount } from '../utils/newsPages';
 
-const articlesPerPage = 10;
-const articles = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const totalPages = Math.ceil(articles.length / articlesPerPage);
+const newsByLabel = await getNewsByLabel();
+const articles = newsByLabel[defaultLabel];
 ---
 
-<SiteLayout title="News — Dreamy Records" page="news">
+<SiteLayout title="News — Phos'Prism" page="news">
   <NewsListing
+    label={defaultLabel}
+    labelCounts={countNews(newsByLabel)}
     articles={articles.slice(0, articlesPerPage)}
     allArticles={articles}
     currentPage={1}
-    totalPages={totalPages}
+    totalPages={pageCount(articles)}
     startIndex={0}
   />
 </SiteLayout>
