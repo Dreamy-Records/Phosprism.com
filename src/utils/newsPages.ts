@@ -19,6 +19,15 @@ export const getNewsLabel = (entry: CollectionEntry<'news'>): LabelId => {
   return labelIds.find((id) => id === folder) ?? defaultLabel;
 };
 
+const newsDescriptions: Record<LabelId, string> = {
+  phosprism: "Phos'Prismの最新情報です。新譜、イベント参加、メンバーの活動などをお知らせします。",
+  'dreamy-records': '解散したDreamy Recordsの、活動期間中のお知らせをまとめたアーカイブです。',
+};
+
+/** ニュース一覧ページの説明文（2ページ目以降はページ番号を付ける） */
+export const newsListDescription = (label: LabelId, page = 1) =>
+  page === 1 ? newsDescriptions[label] : `${newsDescriptions[label]}（${page}ページ目）`;
+
 export type NewsByLabel = Record<LabelId, CollectionEntry<'news'>[]>;
 
 /** 新しい順に並べた記事をレーベルごとに返す */

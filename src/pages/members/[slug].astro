@@ -12,7 +12,11 @@ const next = members[(index + 1) % members.length];
 const repeatedName = Array.from({ length: 7 }, () => member.nameEn);
 ---
 
-<SiteLayout title={`${member.name} — Phos'Prism`} page="member-detail">
+<SiteLayout
+  title={`${member.name} — Phos'Prism`}
+  page="member-detail"
+  description={`Phos'Prismの${member.name}（${member.role}）のプロフィールです。`}
+>
   <div class="member-intro" aria-hidden="true"></div>
   <main class="member-profile">
     <div class="profile-name-bg" aria-hidden="true">

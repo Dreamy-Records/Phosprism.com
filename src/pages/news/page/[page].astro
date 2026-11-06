@@ -2,7 +2,13 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import NewsListing from '../../../components/NewsListing.astro';
 import { defaultLabel } from '../../../data/labels';
-import { articlesPerPage, countNews, getNewsByLabel, pageCount } from '../../../utils/newsPages';
+import {
+  articlesPerPage,
+  countNews,
+  getNewsByLabel,
+  newsListDescription,
+  pageCount,
+} from '../../../utils/newsPages';
 
 export async function getStaticPaths() {
   const newsByLabel = await getNewsByLabel();
@@ -23,7 +29,11 @@ const { newsByLabel, currentPage, totalPages, startIndex } = Astro.props;
 const articles = newsByLabel[defaultLabel];
 ---
 
-<SiteLayout title={`News — Page ${currentPage} — Phos'Prism`} page="news">
+<SiteLayout
+  title={`News — Page ${currentPage} — Phos'Prism`}
+  page="news"
+  description={newsListDescription(defaultLabel, currentPage)}
+>
   <NewsListing
     label={defaultLabel}
     labelCounts={countNews(newsByLabel)}

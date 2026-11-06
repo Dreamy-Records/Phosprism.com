@@ -2,7 +2,13 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import NewsListing from '../../../components/NewsListing.astro';
 import { defaultLabel, labels } from '../../../data/labels';
-import { articlesPerPage, countNews, getNewsByLabel, pageCount } from '../../../utils/newsPages';
+import {
+  articlesPerPage,
+  countNews,
+  getNewsByLabel,
+  newsListDescription,
+  pageCount,
+} from '../../../utils/newsPages';
 
 // 初期表示以外のレーベル（/news/dreamy-records/ など）
 export async function getStaticPaths() {
@@ -16,7 +22,11 @@ const { label, newsByLabel } = Astro.props;
 const articles = newsByLabel[label.id];
 ---
 
-<SiteLayout title={`News — ${label.name} — Phos'Prism`} page="news">
+<SiteLayout
+  title={`News — ${label.name} — Phos'Prism`}
+  page="news"
+  description={newsListDescription(label.id)}
+>
   <NewsListing
     label={label.id}
     labelCounts={countNews(newsByLabel)}

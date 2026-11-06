@@ -72,7 +72,11 @@ const isTabHidden = (tab: string) => hiddenTabsByLabel[defaultLabel]?.includes(t
 const hasItems = (items: { label: LabelId }[]) => items.some((item) => item.label === defaultLabel);
 ---
 
-<SiteLayout title="Media — Phos'Prism" page="media">
+<SiteLayout
+  title="Media — Phos'Prism"
+  page="media"
+  description="Phos'PrismのXFD・MVを掲載しています。Dreamy Records時代の動画や壁紙もご覧いただけます。"
+>
   <main class="page-shell dark-page media-page">
     <header class="page-title">
       <span>07 / MEDIA</span>

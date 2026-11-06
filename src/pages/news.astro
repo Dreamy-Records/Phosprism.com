@@ -2,13 +2,19 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import NewsListing from '../components/NewsListing.astro';
 import { defaultLabel } from '../data/labels';
-import { articlesPerPage, countNews, getNewsByLabel, pageCount } from '../utils/newsPages';
+import {
+  articlesPerPage,
+  countNews,
+  getNewsByLabel,
+  newsListDescription,
+  pageCount,
+} from '../utils/newsPages';
 
 const newsByLabel = await getNewsByLabel();
 const articles = newsByLabel[defaultLabel];
 ---
 
-<SiteLayout title="News — Phos'Prism" page="news">
+<SiteLayout title="News — Phos'Prism" page="news" description={newsListDescription(defaultLabel)}>
   <NewsListing
     label={defaultLabel}
     labelCounts={countNews(newsByLabel)}

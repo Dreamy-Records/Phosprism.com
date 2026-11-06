@@ -20,7 +20,7 @@ const {
   noindex = false,
   redirectTo,
 }: Props = Astro.props;
-const defaultOgImage = '/assets/news/19-Dreamy-Records-header-1.png';
+const defaultOgImage = '/assets/phosprism header.png';
 const ogImageBase = import.meta.env.DEV ? Astro.url.origin : Astro.site;
 const ogImage = new URL(image || defaultOgImage, ogImageBase).href;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
