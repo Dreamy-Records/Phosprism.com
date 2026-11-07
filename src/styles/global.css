@@ -1905,6 +1905,40 @@ img {
   background: #fff;
   color: #000;
 }
+/* リンクがない作品のボタン（灰色・押せない） */
+.flow-info .flow-release-button.is-disabled,
+.flow-info .flow-release-button.is-disabled:hover {
+  border-color: #333;
+  background: transparent;
+  color: #666;
+  cursor: not-allowed;
+}
+.music-item.is-disabled:hover {
+  padding-left: 0;
+  background: none;
+}
+.music-item.is-disabled:hover .music-cover img {
+  transform: none;
+}
+.flow-info .flow-release-button.is-disabled i {
+  display: none;
+}
+.music-item.is-disabled .music-action {
+  color: #666;
+}
+/* スマホの一覧は右端のボタン列を出さないので、タイトルの下に表記する */
+.music-unavailable {
+  display: none;
+}
+@media (max-width: 760px) {
+  .music-title .music-unavailable {
+    display: inline-block;
+    padding: 4px 7px;
+    border: 1px solid #333;
+    color: #666;
+    font-size: 8px;
+  }
+}
 .flow-count {
   position: absolute;
   right: 0;
