@@ -3447,12 +3447,9 @@ img {
   opacity: 0;
 }
 @media (max-width: 760px) {
+  /* スマホでは背景に流れる名前を表示しない */
   .profile-name-bg {
-    top: 360px;
-    opacity: 0.14;
-  }
-  .profile-name-track span {
-    font-size: 18vw;
+    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
