@@ -11,19 +11,18 @@ const slides = [
 
 <SiteLayout title="Phos'Prism">
   <main class="home">
-    <div class="hero-slides" aria-label="Phos'Prism ビジュアル">
+    <div class="hero-slides" aria-hidden="true">
       {
         slides.map((src, index) => (
           <OptimizedImage
             class="hero-slide"
             src={src}
             alt=""
-            ariaHidden={index === 0 ? 'false' : 'true'}
             loading={index === 0 ? 'eager' : 'lazy'}
             decoding="async"
-            widths={[640, 960, 1280, 1920]}
+            widths={[480, 640, 960, 1280, 1600, 1920]}
             sizes="100vw"
-            quality={80}
+            quality={index === 0 ? 80 : 72}
             fetchpriority={index === 0 ? 'high' : undefined}
             deferred={index > 0}
           />
@@ -64,24 +63,21 @@ const slides = [
     gsap.killTweensOf(slides);
   };
 
-  // 2枚目以降のスライドは、ページの表示が終わってから読み込む
-  const loadDeferredImages = () => {
-    document.querySelectorAll<HTMLImageElement>('img[data-deferred-image]').forEach((image) => {
-      const source = image.parentElement?.querySelector<HTMLSourceElement>('source[data-srcset]');
-      if (source?.dataset.srcset) {
-        source.srcset = source.dataset.srcset;
-        source.removeAttribute('data-srcset');
-      }
-      if (image.dataset.src) {
-        image.src = image.dataset.src;
-        image.removeAttribute('data-src');
-      }
-      image.removeAttribute('data-deferred-image');
-    });
+  // 2枚目以降のスライドは、表示する少し前に1枚ずつ読み込む
+  const loadSlide = (slide: HTMLImageElement | undefined) => {
+    if (!slide?.hasAttribute('data-deferred-image')) return;
+    const source = slide.parentElement?.querySelector<HTMLSourceElement>('source[data-srcset]');
+    if (source?.dataset.srcset) {
+      source.srcset = source.dataset.srcset;
+      source.removeAttribute('data-srcset');
+    }
+    if (slide.dataset.src) {
+      slide.src = slide.dataset.src;
+      slide.removeAttribute('data-src');
+    }
+    slide.removeAttribute('data-deferred-image');
   };
-
-  if (document.readyState === 'complete') loadDeferredImages();
-  else window.addEventListener('load', loadDeferredImages, { once: true });
+  const loadNextSlide = () => loadSlide(slides[(current + 1) % slides.length]);
 
   const startSlideshow = () => {
     if (!slides.length) return;
@@ -90,19 +86,20 @@ const slides = [
     current = 0;
     gsap.set(slides, { opacity: 0, xPercent: 100, zIndex: 0 });
     gsap.set(slides[0], { opacity: 1, xPercent: 0, scale: 1.08, zIndex: 1 });
-    slides.forEach((slide, index) => slide.setAttribute('aria-hidden', String(index !== 0)));
 
     if (reduceMotion || slides.length < 2) return;
 
     gsap.to(slides[0], { scale: 1, duration: 4.1, ease: 'none' });
+    // 最初の切り替えに間に合うよう、2枚目はページの表示が終わってから読み込む
+    if (document.readyState === 'complete') window.setTimeout(loadNextSlide, 2000);
+    else window.addEventListener('load', () => window.setTimeout(loadNextSlide, 2000), { once: true });
     slideshowTimer = window.setInterval(() => {
-      loadDeferredImages();
       const previous = slides[current];
       current = (current + 1) % slides.length;
       const next = slides[current];
 
-      previous.setAttribute('aria-hidden', 'true');
-      next.setAttribute('aria-hidden', 'false');
+      loadSlide(next);
+      loadNextSlide();
 
       gsap
         .timeline()
