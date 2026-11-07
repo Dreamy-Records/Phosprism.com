@@ -2,10 +2,11 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import OptimizedImage from '../components/OptimizedImage.astro';
 
-const slides = [
-  '/assets/phosprism header.png',
-  '/assets/futuremagic.webp',
-  '/assets/DDF.01.webp',
+// mobile: 縦長の画面（スマホなど）で代わりに表示する画像
+const slides: { src: string; mobile?: string }[] = [
+  { src: '/assets/phosprism header.png', mobile: '/assets/phosprism header mobile.png' },
+  { src: '/assets/futuremagic.webp' },
+  { src: '/assets/DDF.01.webp' },
 ];
 ---
 
@@ -13,10 +14,11 @@ const slides = [
   <main class="home">
     <div class="hero-slides" aria-hidden="true">
       {
-        slides.map((src, index) => (
+        slides.map((slide, index) => (
           <OptimizedImage
             class="hero-slide"
-            src={src}
+            src={slide.src}
+            mobileSrc={slide.mobile}
             alt=""
             loading={index === 0 ? 'eager' : 'lazy'}
             decoding="async"
@@ -66,11 +68,10 @@ const slides = [
   // 2枚目以降のスライドは、表示する少し前に1枚ずつ読み込む
   const loadSlide = (slide: HTMLImageElement | undefined) => {
     if (!slide?.hasAttribute('data-deferred-image')) return;
-    const source = slide.parentElement?.querySelector<HTMLSourceElement>('source[data-srcset]');
-    if (source?.dataset.srcset) {
-      source.srcset = source.dataset.srcset;
+    slide.parentElement?.querySelectorAll<HTMLSourceElement>('source[data-srcset]').forEach((source) => {
+      source.srcset = source.dataset.srcset ?? '';
       source.removeAttribute('data-srcset');
-    }
+    });
     if (slide.dataset.src) {
       slide.src = slide.dataset.src;
       slide.removeAttribute('data-src');

@@ -17,6 +17,10 @@ interface Props {
   fetchpriority?: 'high' | 'low' | 'auto';
   /** true にすると読み込みを後回しにする（data-srcset に入れ、スクリプト側で差し替える） */
   deferred?: boolean;
+  /** 縦長の画面で代わりに表示する画像（トップのスライドのスマホ版など） */
+  mobileSrc?: string;
+  /** mobileSrc を使う画面の条件 */
+  mobileMedia?: string;
 }
 
 const {
@@ -32,6 +36,8 @@ const {
   quality = 95,
   fetchpriority,
   deferred = false,
+  mobileSrc,
+  mobileMedia = '(max-aspect-ratio: 3/4)',
 } = Astro.props;
 
 const localImages = import.meta.glob<ImageMetadata>(
@@ -47,20 +53,31 @@ const localImages = import.meta.glob<ImageMetadata>(
     import: 'default',
   },
 );
-const image = localImages[`..${decodeURIComponent(src)}`];
-
-if (!image) {
-  throw new Error(`最適化対象の画像が見つかりません: ${src}`);
-}
+const findImage = (path: string) => {
+  const found = localImages[`..${decodeURIComponent(path)}`];
+  if (!found) throw new Error(`最適化対象の画像が見つかりません: ${path}`);
+  return found;
+};
+const image = findImage(src);
 
 // 元画像より大きいサイズは作らない（拡大しても画質は上がらず、容量だけ増えるため）
-const requestedWidths = widths ?? [320, 640, 960, 1280];
-const responsiveWidths = requestedWidths.filter((width) => width < image.width);
-if (widths && requestedWidths.some((width) => width >= image.width)) responsiveWidths.push(image.width);
-const outputWidths = responsiveWidths.length ? responsiveWidths : [image.width];
-const webpSources = await Promise.all(
-  outputWidths.map((width) => getImage({ src: image, width, format: 'webp', quality })),
-);
+const getOutputWidths = (target: ImageMetadata) => {
+  const requestedWidths = widths ?? [320, 640, 960, 1280];
+  const responsiveWidths = requestedWidths.filter((width) => width < target.width);
+  if (widths && requestedWidths.some((width) => width >= target.width)) {
+    responsiveWidths.push(target.width);
+  }
+  return responsiveWidths.length ? responsiveWidths : [target.width];
+};
+const createSrcset = async (target: ImageMetadata) => {
+  const outputWidths = getOutputWidths(target);
+  const sources = await Promise.all(
+    outputWidths.map((width) => getImage({ src: target, width, format: 'webp', quality })),
+  );
+  return sources.map((source, index) => `${source.src} ${outputWidths[index]}w`).join(', ');
+};
+const srcset = await createSrcset(image);
+const mobileSrcset = mobileSrc ? await createSrcset(findImage(mobileSrc)) : undefined;
 const fallbackFormat = image.format === 'webp' || image.format === 'avif' ? 'png' : image.format;
 const fallback = await getImage({
   src: image,
@@ -68,10 +85,20 @@ const fallback = await getImage({
   format: fallbackFormat,
   quality: 95,
 });
-const srcset = webpSources.map((source, index) => `${source.src} ${outputWidths[index]}w`).join(', ');
 ---
 
 <picture>
+  {
+    mobileSrcset && (
+      <source
+        media={mobileMedia}
+        srcset={deferred ? undefined : mobileSrcset}
+        data-srcset={deferred ? mobileSrcset : undefined}
+        sizes={sizes ?? '100vw'}
+        type="image/webp"
+      />
+    )
+  }
   <source
     srcset={deferred ? undefined : srcset}
     data-srcset={deferred ? srcset : undefined}
