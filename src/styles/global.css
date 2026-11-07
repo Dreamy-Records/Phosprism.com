@@ -197,11 +197,6 @@ img {
   width: 34px;
   padding-right: 0;
 }
-.menu-button span {
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  font-weight: 700;
-}
 .menu-button i {
   position: absolute;
   top: 50%;
