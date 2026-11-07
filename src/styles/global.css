@@ -165,17 +165,18 @@ img {
   mix-blend-mode: difference;
 }
 .brand {
+  --logo-size: 68px;
   position: relative;
   z-index: 2;
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  margin-left: -12px;
+  /* ロゴ画像の左側にある透明な余白（幅の約10.5%）を打ち消し、ロゴの左端をヘッダーの余白にそろえる */
+  margin-left: calc(var(--logo-size) * -0.105);
 }
 .brand img {
-  width: 120px;
-  height: auto;
-  max-height: 68px;
+  width: var(--logo-size);
+  height: var(--logo-size);
   object-fit: contain;
   filter: brightness(0) invert(1);
 }
@@ -599,12 +600,8 @@ img {
     height: 74px;
     padding: 0 20px;
   }
-  .brand img {
-    width: 92px;
-    max-height: 52px;
-  }
   .brand {
-    margin-left: -6px;
+    --logo-size: 52px;
   }
   .global-menu {
     padding: 105px 20px 25px;
