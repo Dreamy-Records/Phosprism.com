@@ -177,12 +177,15 @@ const repeatedName = Array.from({ length: 7 }, () => member.nameEn);
   }
 
   if (!reduceMotion) {
-    if (leftTrack) gsap.to(leftTrack, { xPercent: -50, duration: 24, repeat: -1, ease: 'none' });
-    if (rightTrack)
-      gsap.fromTo(
-        rightTrack,
-        { xPercent: -50 },
-        { xPercent: 0, duration: 28, repeat: -1, ease: 'none' },
-      );
+    // スマホ（760px以下）では名前を表示しないので、流すアニメーションも画面幅が広いときだけ動かす
+    gsap.matchMedia().add('(min-width: 761px)', () => {
+      if (leftTrack) gsap.to(leftTrack, { xPercent: -50, duration: 24, repeat: -1, ease: 'none' });
+      if (rightTrack)
+        gsap.fromTo(
+          rightTrack,
+          { xPercent: -50 },
+          { xPercent: 0, duration: 28, repeat: -1, ease: 'none' },
+        );
+    });
   }
 </script>
