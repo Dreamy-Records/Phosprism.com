@@ -181,8 +181,13 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
 
       <div class="flow-controls">
         <div class="flow-info">
-          <a class="flow-release-button icon-action" id="flow-link" href={initialReleases[0]?.link ?? '#'}>
-            <span>VIEW RELEASE</span>
+          <a
+            class:list={['flow-release-button', 'icon-action', { 'is-disabled': !initialReleases[0]?.link }]}
+            id="flow-link"
+            href={initialReleases[0]?.link}
+            aria-disabled={initialReleases[0]?.link ? undefined : 'true'}
+          >
+            <span data-flow-link-label>{initialReleases[0]?.link ? 'VIEW RELEASE' : 'NOT AVAILABLE'}</span>
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
           </a>
         </div>
@@ -196,9 +201,12 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
 
     <section class="music-list music-list-view" aria-label="作品一覧" hidden>
       {
-        releases.map((release, index) => (
-          <a
-            class="music-item"
+        releases.map((release, index) => {
+          // リンクがない作品は押せない要素（div）で表示する
+          const ReleaseItem = release.link ? 'a' : 'div';
+          return (
+          <ReleaseItem
+            class:list={['music-item', { 'is-disabled': !release.link }]}
             href={release.link}
             data-label={release.label}
             hidden={release.label !== defaultLabel}
@@ -212,15 +220,21 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
                 {release.code} / {release.year}
               </small>
               <h2>{release.title}</h2>
+              {!release.link && <small class="music-unavailable">NOT AVAILABLE</small>}
             </span>
             <span class="music-action">
-              <>
-                <span>VIEW RELEASE</span>
-                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
-              </>
+              {release.link ? (
+                <>
+                  <span>VIEW RELEASE</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+                </>
+              ) : (
+                <span>NOT AVAILABLE</span>
+              )}
             </span>
-          </a>
-        ))
+          </ReleaseItem>
+          );
+        })
       }
     </section>
   </main>
@@ -241,6 +255,7 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
     const current = document.querySelector('#flow-current');
     const total = document.querySelector('#flow-total');
     const flowLink = document.querySelector<HTMLAnchorElement>('#flow-link');
+    const flowLinkLabel = flowLink?.querySelector<HTMLElement>('[data-flow-link-label]');
     const labelIds = labelButtons.map((button) => button.dataset.labelFilter ?? '');
     const labelKey = 'phosprism-music-label';
     const activeReleaseKey = (label: string) => `phosprism-active-release-${label}`;
@@ -291,7 +306,19 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
 
       const selected = covers[active];
       if (current) current.textContent = String(active + 1).padStart(2, '0');
-      if (flowLink) flowLink.href = selected.dataset.link || '#';
+      if (flowLink) {
+        // リンクがない作品はボタンを灰色にして押せなくする
+        const link = selected.dataset.link;
+        if (link) {
+          flowLink.href = link;
+          flowLink.removeAttribute('aria-disabled');
+        } else {
+          flowLink.removeAttribute('href');
+          flowLink.setAttribute('aria-disabled', 'true');
+        }
+        flowLink.classList.toggle('is-disabled', !link);
+        if (flowLinkLabel) flowLinkLabel.textContent = link ? 'VIEW RELEASE' : 'NOT AVAILABLE';
+      }
       sessionStorage.setItem(activeReleaseKey(currentLabel), String(active));
     };
 
