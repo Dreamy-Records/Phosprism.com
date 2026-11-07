@@ -1,4 +1,4 @@
-# ブラウザキャッシュの設定（本番サーバー用）
+# ブラウザキャッシュとセキュリティヘッダーの設定（本番サーバー用）
 <IfModule mod_headers.c>
   <If "%{REQUEST_URI} =~ m#^/_astro/#">
     # ファイル名に内容のハッシュが付くビルド成果物は1年間キャッシュする
@@ -12,4 +12,16 @@
     # HTMLなどは毎回更新を確認する
     Header set Cache-Control "no-cache"
   </Else>
+
+  # 常にHTTPSで接続させる（1年間）
+  Header always set Strict-Transport-Security "max-age=31536000"
+  # 他サイトの iframe に埋め込ませない（クリックジャッキング対策）
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Content-Security-Policy "frame-ancestors 'self'"
+  # 別サイトのウィンドウとの関係を切り離す
+  Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+  # ファイルの種類を推測させない
+  Header always set X-Content-Type-Options "nosniff"
+  # 外部サイトへ送るリファラーをドメインだけにする
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>

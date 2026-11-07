@@ -20,7 +20,10 @@ const {
   noindex = false,
   redirectTo,
 }: Props = Astro.props;
-const defaultOgImage = '/assets/phosprism header.png';
+// 表示を止めないよう、Google Fonts は preload してから読み込み後に適用する
+const googleFontsUrl =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;600;800&display=swap';
+const defaultOgImage ='/assets/phosprism header.png';
 const ogImageBase = import.meta.env.DEV ? Astro.url.origin : Astro.site;
 const ogImage = new URL(image || defaultOgImage, ogImageBase).href;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
@@ -64,9 +67,11 @@ const currentPageLabel =
       rel="preconnect"
       href="https://fonts.googleapis.com"
     /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;600;800&display=swap"
-    /><link
+      rel="preload"
+      as="style"
+      href={googleFontsUrl}
+      onload="this.onload=null;this.rel='stylesheet'"
+    /><noscript><link rel="stylesheet" href={googleFontsUrl} /></noscript><link
       rel="icon"
       href="/favicon.ico"
       sizes="48x48"
@@ -116,21 +121,44 @@ const currentPageLabel =
     }
     {
       !isStaging && (
-        <>
-          <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-MJNKBW52SR" />
-          <script is:inline>
-            window.dataLayer = window.dataLayer || []; function gtag() {'{'}
-            dataLayer.push(arguments);{'}'}
-            gtag('js', new Date()); gtag('config', 'G-MJNKBW52SR');
-          </script>
-        </>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          // タグマネージャーの「ページビュー」系トリガーを動かすための開始イベント
+          dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          // 計測用スクリプトはページの表示が終わってから読み込む（送信内容は dataLayer に溜まる）
+          window.addEventListener(
+            'load',
+            () => {
+              const loadGtag = () => {
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-T9TMRZ4G';
+                document.head.appendChild(script);
+              };
+              if ('requestIdleCallback' in window) requestIdleCallback(loadGtag, { timeout: 3000 });
+              else setTimeout(loadGtag, 1000);
+            },
+            { once: true },
+          );
+        </script>
       )
     }</head
   >
   <body id="top" class={page ? 'inner-body' : 'home-body'}>
     <header class="header">
       <a href="/" class="brand">
-        <OptimizedImage src="/assets/logo.png" alt="Phos'Prism" />
+        <OptimizedImage
+          src="/assets/logo.png"
+          alt="Phos'Prism"
+          loading="eager"
+          fetchpriority="high"
+          widths={[240, 480]}
+          sizes="120px"
+        />
       </a>
       <nav class="desktop-nav" aria-label="メインナビゲーション">
         {

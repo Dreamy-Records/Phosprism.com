@@ -53,8 +53,10 @@ if (!image) {
   throw new Error(`最適化対象の画像が見つかりません: ${src}`);
 }
 
-const responsiveWidths =
-  widths ?? [320, 640, 960, 1280].filter((width) => width < image.width);
+// 元画像より大きいサイズは作らない（拡大しても画質は上がらず、容量だけ増えるため）
+const requestedWidths = widths ?? [320, 640, 960, 1280];
+const responsiveWidths = requestedWidths.filter((width) => width < image.width);
+if (widths && requestedWidths.some((width) => width >= image.width)) responsiveWidths.push(image.width);
 const outputWidths = responsiveWidths.length ? responsiveWidths : [image.width];
 const webpSources = await Promise.all(
   outputWidths.map((width) => getImage({ src: image, width, format: 'webp', quality })),
