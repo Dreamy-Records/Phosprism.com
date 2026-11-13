@@ -372,12 +372,14 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
       const y = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
 
       if (Math.max(Math.abs(x), Math.abs(y)) < 1.3) {
+        // マウスを動かすたびに作るので、前の傾きアニメーションは上書きして重ねない
         gsap.to(cover, {
           rotationY: x * 7,
           rotationX: -y * 7,
           scale: 1.025,
           duration: 0.35,
           ease: 'power2.out',
+          overwrite: 'auto',
         });
       } else {
         gsap.to(cover, {
@@ -386,6 +388,7 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
           scale: 1,
           duration: 0.45,
           ease: 'power3.out',
+          overwrite: 'auto',
         });
       }
     });
@@ -398,6 +401,7 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
         scale: 1,
         duration: 0.45,
         ease: 'power3.out',
+        overwrite: 'auto',
       });
     });
 
@@ -419,7 +423,12 @@ const initialReleases = releases.filter((release) => release.label === defaultLa
       });
     });
 
-    addEventListener('resize', () => render(true));
+    // リサイズ中に何度も呼ばれるので、1フレームに1回だけ並べ直す
+    let resizeFrame = 0;
+    addEventListener('resize', () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => render(true));
+    });
     setLabel(currentLabel);
   </script>
 </SiteLayout>

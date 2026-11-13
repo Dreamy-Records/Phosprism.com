@@ -95,6 +95,8 @@ const slides: { src: string; mobile?: string }[] = [
     if (document.readyState === 'complete') window.setTimeout(loadNextSlide, 2000);
     else window.addEventListener('load', () => window.setTimeout(loadNextSlide, 2000), { once: true });
     slideshowTimer = window.setInterval(() => {
+      // 別のタブを見ている間は切り替えない（戻ったときに切り替えが溜まって一気に動くのを防ぐ）
+      if (document.hidden) return;
       const previous = slides[current];
       current = (current + 1) % slides.length;
       const next = slides[current];
